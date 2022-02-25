@@ -1,3 +1,4 @@
+from modelo.pacienteDao import Persona, guardarDatoPaciente
 import tkinter as tk
 
 class Frame(tk.Frame):
@@ -8,6 +9,7 @@ class Frame(tk.Frame):
         self.pack()
         self.config(bg='#CDD8FF')
         self.camposPaciente()
+        self.deshabilitar()
 
     def camposPaciente(self):
         #LABELS
@@ -85,14 +87,72 @@ class Frame(tk.Frame):
         self.entryTelefono.grid(column=1, row=7, padx=10, pady=5,columnspan=2)
 
         #BUTTONS
-        self.btnNuevo = tk.Button(self, text='Nuevo')
+        self.btnNuevo = tk.Button(self, text='Nuevo', command=self.habilitar)
         self.btnNuevo.config(width=20, font=('SANZ',13,'bold'), fg='#FCFDFE', bg='#277B9B', cursor='hand2', activebackground='#72B2FA')
         self.btnNuevo.grid(column=0,row=8, padx=10, pady=5)
 
-        self.btnGuardar = tk.Button(self, text='Guardar')
+        self.btnGuardar = tk.Button(self, text='Guardar', command=self.guardarPaciente)
         self.btnGuardar.config(width=20, font=('SANZ',13,'bold'), fg='#FCFDFE', bg='#2AD20F', cursor='hand2', activebackground='#6CF756')
         self.btnGuardar.grid(column=1,row=8, padx=10, pady=5)
 
-        self.btnCancelar = tk.Button(self, text='Cancelar')
+        self.btnCancelar = tk.Button(self, text='Cancelar',command=self.deshabilitar)
         self.btnCancelar.config(width=20, font=('SANZ',13,'bold'), fg='#FCFDFE', bg='#EA2A1A', cursor='hand2', activebackground='#F35F53')
         self.btnCancelar.grid(column=2,row=8, padx=10, pady=5)
+
+#Funciones para los botones
+
+    def guardarPaciente(self):
+        persona = Persona(
+            self.svNombre.get(), self.svApellido.get(), self.svDni.get(), self.svFechNacimiento.get(), self.svEdad.get(), self.svAntecedentes.get(),
+            self.svEmail.get(), self.svTelefono.get()
+        )
+        guardarDatoPaciente(persona)
+        self.deshabilitar()
+
+#Función para que todos los campos esten deshabilitados al comienzo del programa
+
+    def deshabilitar(self):
+        self.svNombre.set(' ')
+        self.svApellido.set(' ')
+        self.svDni.set(' ')
+        self.svEdad.set(' ')
+        self.svFechNacimiento.set(' ')
+        self.svAntecedentes.set(' ')
+        self.svEmail.set(' ')
+        self.svTelefono.set(' ')
+
+        self.entryNombre.config(state='disabled')
+        self.entryApellido.config(state='disabled')
+        self.entryDni.config(state='disabled')
+        self.entryEdad.config(state='disabled')
+        self.entryFechNacimiento.config(state='disabled')
+        self.entryAntecedentes.config(state='disabled')
+        self.entryEmail.config(state='disabled')
+        self.entryTelefono.config(state='disabled')
+
+        self.btnGuardar.config(state='disabled')
+        self.btnCancelar.config(state='disabled')
+
+#Habilitamos los botones
+
+    def habilitar(self):
+        self.svNombre.set(' ')
+        self.svApellido.set(' ')
+        self.svDni.set(' ')
+        self.svEdad.set(' ')
+        self.svFechNacimiento.set(' ')
+        self.svAntecedentes.set(' ')
+        self.svEmail.set(' ')
+        self.svTelefono.set(' ')
+
+        self.entryNombre.config(state='normal')
+        self.entryApellido.config(state='normal')
+        self.entryDni.config(state='normal')
+        self.entryEdad.config(state='normal')
+        self.entryFechNacimiento.config(state='normal')
+        self.entryAntecedentes.config(state='normal')
+        self.entryEmail.config(state='normal')
+        self.entryTelefono.config(state='normal')
+
+        self.btnGuardar.config(state='normal')
+        self.btnCancelar.config(state='normal')
