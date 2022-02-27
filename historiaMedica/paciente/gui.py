@@ -1,5 +1,8 @@
-from modelo.pacienteDao import Persona, guardarDatoPaciente
+from cgitb import text
 import tkinter as tk
+from tkinter import *
+from tkinter import ttk, Button, scrolledtext, Toplevel
+from modelo.pacienteDao import Persona, guardarDatoPaciente, listar, buscarPaciente
 
 class Frame(tk.Frame):
     def __init__(self, root):
@@ -10,6 +13,7 @@ class Frame(tk.Frame):
         self.config(bg='#CDD8FF')
         self.camposPaciente()
         self.deshabilitar()
+        self.tablaPaciente()
 
     def camposPaciente(self):
         #LABELS
@@ -108,6 +112,7 @@ class Frame(tk.Frame):
         )
         guardarDatoPaciente(persona)
         self.deshabilitar()
+        self.tablaPaciente()
 
 #Función para que todos los campos esten deshabilitados al comienzo del programa
 
@@ -156,3 +161,45 @@ class Frame(tk.Frame):
 
         self.btnGuardar.config(state='normal')
         self.btnCancelar.config(state='normal')
+
+    def tablaPaciente(self, where=""):
+
+        if len(where) > 0:
+            self.listaPersona = buscarPaciente(where)
+        else:
+            self.listaPersona = listar()
+
+        self.tabla = ttk.Treeview(self, column=('Nombre', 'Apellido', 'Dni', 'Edad',
+        'FechaNacimiento', 'Antecedentes', 'Email', 'Telefono'))
+        self.tabla.grid(column=0, row=9, columnspan=9, sticky='nse')
+        
+        self.scroll = ttk.Scrollbar(self, orient='vertical', command=self.tabla.yview)
+        self.scroll.grid(row=9, column=10, sticky='nse')
+
+        self.tabla.configure(yscrollcommand=self.scroll.set)
+
+        self.tabla.tag_configure('evenrow', background='#E5DADA')
+
+        self.tabla.heading('#0', text='ID')
+        self.tabla.heading('#1', text='Nombre')
+        self.tabla.heading('#2', text='Apellido')
+        self.tabla.heading('#3', text='DNI')
+        self.tabla.heading('#4', text='Fecha Nacimiento')
+        self.tabla.heading('#5', text='Edad')
+        self.tabla.heading('#6', text='Antecedentes')
+        self.tabla.heading('#7', text='Email')
+        self.tabla.heading('#8', text='Telefono')
+
+        self.tabla.column('#0', anchor=W, width=30)
+        self.tabla.column('#1', anchor=W, width=150)
+        self.tabla.column('#2', anchor=W, width=150)
+        self.tabla.column('#3', anchor=W, width=80)
+        self.tabla.column('#4', anchor=W, width=80)
+        self.tabla.column('#5', anchor=W, width=50)
+        self.tabla.column('#6', anchor=W, width=300)
+        self.tabla.column('#7', anchor=W, width=150)
+        self.tabla.column('#8', anchor=W, width=100)
+
+        for p in self.listaPersona:
+
+            self.tabla.insert('',0,text=p[0], values=(p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8]), tag=('evenrow',))
